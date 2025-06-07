@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAR Department - TeraBox File Sharing</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .folder {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .folder-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .folder-icon {
+            font-size: 24px;
+            margin-right: 10px;
+            color: #3498db;
+        }
+        .folder-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2980b9;
+        }
+        .file-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 10px;
+        }
+        .file-item {
+            padding: 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+        .file-item:hover {
+            background: #f0f7ff;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .file-name {
+            flex-grow: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .file-icon {
+            margin-right: 8px;
+            color: #7f8c8d;
+        }
+        .download-btn {
+            background: #3498db;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .download-btn:hover {
+            background: #2980b9;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-cloud-upload-alt"></i> MAR Department File Sharing</h1>
+        
+        <!-- Folder 1: Zoom Recordings -->
+        <div class="folder">
+            <div class="folder-header">
+                <div class="folder-icon"><i class="fas fa-video"></i></div>
+                <div class="folder-name">Zoom Recordings</div>
+            </div>
+            <div class="file-list">
+                <!-- Replace these with your actual TeraBox shared links -->
+                <div class="file-item">
+                    <div class="file-name"><i class="fas fa-file-video file-icon"></i> MAR Students Files </div>
+                    <a href="https://1024terabox.com/s/1FXWUNKu_sPkmBNrS9ywnOg" class="download-btn" target="_blank">Download</a>
+                </div>
+                <div class="file-item">
+                    <div class="file-name"><i class="fas fa-file-video file-icon"></i> Week 2 - Marketing Basics.mp4</div>
+                    <a href="YOUR_TERABOX_SHARE_LINK_2" class="download-btn" target="_blank">Download</a>
+                </div>
+                <!-- Add more files as needed -->
+            </div>
+        </div>
+        
+        <!-- Folder 2: MAR 111 -->
+        <div class="folder">
+            <div class="folder-header">
+                <div class="folder-icon"><i class="fas fa-book"></i></div>
+                <div class="folder-name">MAR 111 - Principles of Marketing</div>
+            </div>
+            <div class="file-list">
+                <div class="file-item">
+                    <div class="file-name"><i class="fas fa-file-pdf file-icon"></i> Syllabus 2024.pdf</div>
+                    <a href="YOUR_TERABOX_SHARE_LINK_3" class="download-btn" target="_blank">Download</a>
+                </div>
+                <div class="file-item">
+                    <div class="file-name"><i class="fas fa-file-powerpoint file-icon"></i> Chapter 1 Slides.pptx</div>
+                    <a href="YOUR_TERABOX_SHARE_LINK_4" class="download-btn" target="_blank">Download</a>
+                </div>
+                <!-- Add more files as needed -->
+            </div>
+        </div>
+        
+        <!-- Folder 3: MAR 112 -->
+        <div class="folder">
+            <div class="folder-header">
+                <div class="folder-icon"><i class="fas fa-users"></i></div>
+                <div class="folder-name">MAR 112 - Consumer Behavior</div>
+            </div>
+            <div class="file-list">
+                <div class="file-item">
+                    <div class="file-name"><i class="fas fa-file-pdf file-icon"></i> Textbook Chapters.pdf</div>
+                    <a href="YOUR_TERABOX_SHARE_LINK_5" class="download-btn" target="_blank">Download</a>
+                </div>
+                <!-- Add more files as needed -->
+            </div>
+        </div>
+        
+        <!-- Folder 4: MAR 113 -->
+        <div class="folder">
+            <div class="folder-header">
+                <div class="folder-icon"><i class="fas fa-laptop-code"></i></div>
+                <div class="folder-name">MAR 113 - Digital Marketing</div>
+            </div>
+            <div class="file-list">
+                <div class="file-item">
+                    <div class="file-name"><i class="fas fa-file-archive file-icon"></i> SEO Resources.zip</div>
+                    <a href="YOUR_TERABOX_SHARE_LINK_6" class="download-btn" target="_blank">Download</a>
+                </div>
+                <!-- Add more files as needed -->
+            </div>
+        </div>
+        
+        <footer>
+            <p>Last updated: <span id="updateDate"></span> | Powered by TeraBox | MAR Department Use Only</p>
+        </footer>
+    </div>
+
+    <script>
+        // Display current date
+        document.getElementById('updateDate').textContent = new Date().toLocaleDateString();
+        
+        // You could add a simple search function here if needed
+    </script>
+</body>
+</html>
