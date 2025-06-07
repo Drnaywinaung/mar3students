@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 400px; margin: 50px auto; }
+        .login-box { padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        input { width: 90%; padding: 10px; margin: 10px 0; }
+        button { background: #0366d6; color: white; border: none; padding: 10px; width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>Student Login</h2>
+        <input type="password" id="password" placeholder="Enter class password">
+        <button onclick="checkPassword()">Login</button>
+        <p id="error" style="color:red;"></p>
+    </div>
+
+    <script>
+        function checkPassword() {
+            const password = "marstudents"; // Change this!
+            const input = document.getElementById("password").value;
+            if (input === password) {
+                window.location.href = "main.html"; // Redirect to main page
+            } else {
+                document.getElementById("error").innerText = "Wrong password!";
+            }
+        }
+    </script>
+</body>
+</html>
