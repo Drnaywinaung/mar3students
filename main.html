@@ -15,7 +15,7 @@
             color: #333;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             padding: 20px;
@@ -27,11 +27,118 @@
             text-align: center;
             border-bottom: 2px solid #3498db;
             padding-bottom: 10px;
+            margin-bottom: 30px;
         }
-        .folder {
+        .folder-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .drive-container {
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            background: white;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .drive-header {
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #4285F4 0%, #34A853 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .drive-icon {
+            height: 28px;
+            width: 28px;
+        }
+        .drive-header h2 {
+            margin: 0;
+            font-weight: 500;
+            font-size: 1.2rem;
+            flex-grow: 1;
+        }
+        .last-updated {
+            font-size: 0.7rem;
+            opacity: 0.9;
+        }
+        .iframe-wrapper {
+            position: relative;
+            height: 350px;
+            background: #f5f5f5;
+            flex-grow: 1;
+        }
+        .drive-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s;
+        }
+        .loading-overlay p {
+            margin-top: 12px;
+            color: #555;
+            font-size: 0.9rem;
+        }
+        .spinner {
+            border: 3px solid rgba(66, 133, 244, 0.2);
+            border-radius: 50%;
+            border-top: 3px solid #4285F4;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .drive-footer {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            text-align: right;
+        }
+        .open-drive-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: #4285F4;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .open-drive-btn:hover {
+            background: rgba(66, 133, 244, 0.1);
+        }
+        .iframe-wrapper.loaded .loading-overlay {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .zoom-folder {
+            grid-column: span 3;
             background: #f8f9fa;
             padding: 15px;
-            margin-bottom: 25px;
             border-radius: 8px;
             border: 1px solid #ddd;
         }
@@ -102,6 +209,10 @@
             color: #7f8c8d;
             font-size: 0.9em;
         }
+        .upload-section {
+            text-align: center;
+            margin: 30px 0;
+        }
         .upload-btn {
             background: #3498db;
             color: white;
@@ -109,226 +220,150 @@
             border-radius: 5px;
             text-decoration: none;
             display: inline-block;
-            margin: 20px 0;
+            transition: background 0.2s;
         }
-    .upload-btn:hover {
+        .upload-btn:hover {
             background: #2980b9;
         }
-  .drive-container {
-    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    max-width: 900px;
-    margin: 20px auto;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    background: white;
-    border: 1px solid #e0e0e0;
-  }
-  
-  .drive-header {
-    padding: 16px 24px;
-    background: linear-gradient(135deg, #4285F4 0%, #34A853 100%);
-    color: white;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  
-  .drive-icon {
-    height: 32px;
-    width: 32px;
-  }
-  
-  .drive-header h2 {
-    margin: 0;
-    font-weight: 500;
-    font-size: 1.4rem;
-    flex-grow: 1;
-  }
-  
-  .last-updated {
-    font-size: 0.8rem;
-    opacity: 0.9;
-  }
-  
-  .iframe-wrapper {
-    position: relative;
-    height: 500px;
-    background: #f5f5f5;
-  }
-  
-  .drive-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: white;
-  }
-  
-  .loading-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.8);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.3s;
-  }
-  
-  .loading-overlay p {
-    margin-top: 16px;
-    color: #555;
-  }
-  
-  .spinner {
-    border: 4px solid rgba(66, 133, 244, 0.2);
-    border-radius: 50%;
-    border-top: 4px solid #4285F4;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  .drive-footer {
-    padding: 12px 24px;
-    background: #f8f9fa;
-    border-top: 1px solid #e0e0e0;
-    text-align: right;
-  }
-  
-  .open-drive-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: #4285F4;
-    text-decoration: none;
-    font-weight: 500;
-    padding: 6px 12px;
-    border-radius: 6px;
-    transition: all 0.2s;
-  }
-  
-  .open-drive-btn:hover {
-    background: rgba(66, 133, 244, 0.1);
-  }
-  
-  /* Hide loading spinner when iframe loads */
-  .iframe-wrapper.loaded .loading-overlay {
-    opacity: 0;
-    pointer-events: none;
-  }
-</style>
+        
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .folder-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .folder-grid {
+                grid-template-columns: 1fr;
+            }
+            .zoom-folder {
+                grid-column: span 1;
+            }
+        }
+    </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <h1><i class="fas fa-cloud-upload-alt"></i> MAR Students File Sharing</h1>
         
-        <!-- Folder 1: Zoom Recordings -->
-        <div class="folder">
+        <!-- Zoom Recordings (full width) -->
+        <div class="zoom-folder">
             <div class="folder-header">
                 <div class="folder-icon"><i class="fas fa-video"></i></div>
                 <div class="folder-name">Zoom Recordings</div>
             </div>
             <div class="file-list">
-                <!-- Replace these with your actual TeraBox shared links -->
                 <div class="file-item">
                     <div class="file-name"><i class="fas fa-file-video file-icon"></i> Zoom Recording Files </div>
-                    <a href="https://1024terabox.com/s/1pyq6JO1rWfCyTSS3goqqIQ" class="download-btn" target="_blank">view</a>
+                    <a href="https://1024terabox.com/s/1pyq6JO1rWfCyTSS3goqqIQ" class="download-btn" target="_blank">View</a>
                 </div>
             </div>
         </div>
-    </div>
         
-        <!-- Folder 2: MAR 111 -->
-       
- <div class="drive-container">
-  <div class="drive-header">
-    <img src="https://www.gstatic.com/images/branding/product/1x/drive_2020q4_48dp.png" alt="Google Drive" class="drive-icon">
-    <h2>MAR 111 Files</h2>
-    <div class="last-updated">Auto-updating • Last synced: <span id="update-time">just now</span></div>
-  </div>
-  
-  <div class="iframe-wrapper">
-    <iframe src="https://drive.google.com/embeddedfolderview?id=1mlQ_mH1yyRY6_x5XE4KgZaXhHDrjNfkK#grid" 
-            class="drive-iframe" 
-            title="MAR111 Files"></iframe>
-    </div>
-  <div class="drive-footer">
-    <a href="https://drive.google.com/drive/folders/1mlQ_mH1yyRY6_x5XE4KgZaXhHDrjNfkK" target="_blank" class="open-drive-btn">
-      Open in Google Drive ↗
-    </a>
-  </div>
-</div>
-        
-                <!-- Add more files as needed -->
-        <!-- Folder 3: MAR 112 -->
-<div class="drive-container">
-  <div class="drive-header">
-    <img src="https://www.gstatic.com/images/branding/product/1x/drive_2020q4_48dp.png" alt="Google Drive" class="drive-icon">
-    <h2>MAR 112 Files</h2>
-    <div class="last-updated">Auto-updating • Last synced: <span id="update-time">just now</span></div>
-  </div>
-  
-  <div class="iframe-wrapper">
-    <iframe src="https://drive.google.com/embeddedfolderview?id=1eo6oJt5-q8ArvjiNycqC64bAKf2S1z99#grid" 
-            class="drive-iframe" 
-            title="MAR 112 Files"></iframe>
-  </div>
-  
-  <div class="drive-footer">
-    <a href="https://drive.google.com/drive/folders/1eo6oJt5-q8ArvjiNycqC64bAKf2S1z99" target="_blank" class="open-drive-btn">
-      Open in Google Drive ↗
-    </a>
-  </div>
-</div>   
-        <!-- Folder 4: MAR 113 -->
-<div class="drive-container">
-  <div class="drive-header">
-    <img src="https://www.gstatic.com/images/branding/product/1x/drive_2020q4_48dp.png" alt="Google Drive" class="drive-icon">
-    <h2>MAR 113Files</h2>
-    <div class="last-updated">Auto-updating • Last synced: <span id="update-time">just now</span></div>
-  </div>
-  
-  <div class="iframe-wrapper">
-    <iframe src="https://drive.google.com/embeddedfolderview?id=1VVamNJFCZAlqYeWWdfknX7h_-ue5He6B#grid" 
-            class="drive-iframe" 
-            title="MMAR 113 Files"></iframe>
-  </div>
-  
-  <div class="drive-footer">
-    <a href="https://drive.google.com/drive/folders/1VVamNJFCZAlqYeWWdfknX7h_-ue5He6B" target="_blank" class="open-drive-btn">
-      Open in Google Drive ↗
-    </a>
-  </div>
-</div>  
+        <!-- Three-column drive containers -->
+        <div class="folder-grid">
+            <!-- MAR 111 -->
+            <div class="drive-container">
+                <div class="drive-header">
+                    <img src="https://www.gstatic.com/images/branding/product/1x/drive_2020q4_48dp.png" alt="Google Drive" class="drive-icon">
+                    <h2>MAR 111 Files</h2>
+                    <div class="last-updated">Last synced: <span class="update-time">just now</span></div>
+                </div>
+                <div class="iframe-wrapper">
+                    <iframe src="https://drive.google.com/embeddedfolderview?id=1mlQ_mH1yyRY6_x5XE4KgZaXhHDrjNfkK#grid" 
+                            class="drive-iframe" 
+                            title="MAR111 Files"></iframe>
+                    <div class="loading-overlay">
+                        <div class="spinner"></div>
+                        <p>Loading files...</p>
+                    </div>
+                </div>
+                <div class="drive-footer">
+                    <a href="https://drive.google.com/drive/folders/1mlQ_mH1yyRY6_x5XE4KgZaXhHDrjNfkK" target="_blank" class="open-drive-btn">
+                        Open in Drive ↗
+                    </a>
+                </div>
+            </div>
+            
+            <!-- MAR 112 -->
+            <div class="drive-container">
+                <div class="drive-header">
+                    <img src="https://www.gstatic.com/images/branding/product/1x/drive_2020q4_48dp.png" alt="Google Drive" class="drive-icon">
+                    <h2>MAR 112 Files</h2>
+                    <div class="last-updated">Last synced: <span class="update-time">just now</span></div>
+                </div>
+                <div class="iframe-wrapper">
+                    <iframe src="https://drive.google.com/embeddedfolderview?id=1eo6oJt5-q8ArvjiNycqC64bAKf2S1z99#grid" 
+                            class="drive-iframe" 
+                            title="MAR 112 Files"></iframe>
+                    <div class="loading-overlay">
+                        <div class="spinner"></div>
+                        <p>Loading files...</p>
+                    </div>
+                </div>
+                <div class="drive-footer">
+                    <a href="https://drive.google.com/drive/folders/1eo6oJt5-q8ArvjiNycqC64bAKf2S1z99" target="_blank" class="open-drive-btn">
+                        Open in Drive ↗
+                    </a>
+                </div>
+            </div>
+            
+            <!-- MAR 113 -->
+            <div class="drive-container">
+                <div class="drive-header">
+                    <img src="https://www.gstatic.com/images/branding/product/1x/drive_2020q4_48dp.png" alt="Google Drive" class="drive-icon">
+                    <h2>MAR 113 Files</h2>
+                    <div class="last-updated">Last synced: <span class="update-time">just now</span></div>
+                </div>
+                <div class="iframe-wrapper">
+                    <iframe src="https://drive.google.com/embeddedfolderview?id=1VVamNJFCZAlqYeWWdfknX7h_-ue5He6B#grid" 
+                            class="drive-iframe" 
+                            title="MAR 113 Files"></iframe>
+                    <div class="loading-overlay">
+                        <div class="spinner"></div>
+                        <p>Loading files...</p>
+                    </div>
+                </div>
+                <div class="drive-footer">
+                    <a href="https://drive.google.com/drive/folders/1VVamNJFCZAlqYeWWdfknX7h_-ue5He6B" target="_blank" class="open-drive-btn">
+                        Open in Drive ↗
+                    </a>
+                </div>
             </div>
         </div>
-        <div>
-    <a href="https://1024terabox.com/s/1JI8pWFXGYXCGrgWxaq-wew" target="_blank" class="upload-btn">
-  <i class="fas fa-upload"></i> Upload Files to TeraBox
-</a>
-</div>
-</div>
-</div>
+        
+        <div class="upload-section">
+            <a href="https://1024terabox.com/s/1JI8pWFXGYXCGrgWxaq-wew" target="_blank" class="upload-btn">
+                <i class="fas fa-upload"></i> Upload Files to TeraBox
+            </a>
+        </div>
+        
         <footer>
             <p>Last updated: <span id="updateDate"></span> | Powered by DrNayWinAung | MAR Students Use Only</p>
         </footer>
     </div>
     
-  <script>
+    <script>
         // Display current date
         document.getElementById('updateDate').textContent = new Date().toLocaleDateString();
         
-        // You could add a simple search function here if needed
+        // Handle iframe loading states
+        document.querySelectorAll('.drive-iframe').forEach(iframe => {
+            iframe.addEventListener('load', function() {
+                this.closest('.iframe-wrapper').classList.add('loaded');
+                const timeElement = this.closest('.drive-container').querySelector('.update-time');
+                timeElement.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            });
+        });
+        
+        // Refresh iframes every hour to ensure updates
+        setInterval(() => {
+            document.querySelectorAll('.drive-iframe').forEach(iframe => {
+                iframe.src = iframe.src.split('&')[0] + `&t=${Date.now()}`;
+                iframe.closest('.iframe-wrapper').classList.remove('loaded');
+            });
+        }, 3600000);
     </script>
 </body>
 </html>
