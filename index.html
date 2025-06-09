@@ -4,19 +4,20 @@
     <link rel="icon" href="marfavicon.png" type="image/x-icon">
     <title>Login</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 400px; margin: 50px auto; }
+     body { font-family: Arial, sans-serif; max-width: 400px; margin: 50px auto; }
         .login-box { padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
         input { width: 90%; padding: 10px; margin: 10px 0; }
         button { background: #0366d6; color: white; border: none; padding: 10px; width: 100%; }
-        .image-container {
-  max-width: 800px;
-  margin: 2rem auto;
-  position: relative;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  overflow: hidden;
-  transition: transform 0.3s ease;
-}
+     .image-container {
+              max-width: 70%;
+             height: auto;
+              margin: 2rem auto;
+              position: relative;
+              box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+              border-radius: 12px;
+              overflow: hidden;
+              transition: transform 0.3s ease;
+            }
 
 .image-container:hover {
   transform: translateY(-5px);
@@ -50,6 +51,11 @@
 
 .image-container:hover .image-caption {
   transform: translateY(0);
+}
+        .responsive-image {
+    max-width: 100%; /* Ensures the image doesn't overflow its container */
+    height: auto;    /* Maintains aspect ratio */
+    display: block;  /* Removes extra space below the image (if it's inline) */
 }
     </style>
 </head>
