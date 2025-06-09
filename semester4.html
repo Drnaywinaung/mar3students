@@ -46,5 +46,109 @@
                 </div>
             </div>
         </div>
+         <!-- Three-column drive containers -->
+        <div class="folder-grid">
+            <!-- MAR 141 -->
+            <div class="drive-container">
+                <div class="drive-header">
+                    <img src="https://www.gstatic.com/images/branding/product/1x/drive_2020q4_48dp.png" alt="Google Drive" class="drive-icon">
+                    <h2>MAR 141 Files</h2>
+                    <div class="last-updated">Last synced: <span class="update-time">just now</span></div>
+                </div>
+                <div class="iframe-wrapper">
+                    <iframe src="https://drive.google.com/embeddedfolderview?id=166hxw08hh-dQfDXwYmy0tY-XfdCEAnZ7#grid"
+                            class="drive-iframe" 
+                            title="MAR141 Files"></iframe>
+                    <div class="loading-overlay">
+                        <div class="spinner"></div>
+                        <p>Loading files...</p>
+                    </div>
+                </div>
+                <div class="drive-footer">
+                    <a href="https://drive.google.com/drive/folders/166hxw08hh-dQfDXwYmy0tY-XfdCEAnZ7" target="_blank" class="open-drive-btn">
+                        Open in Drive ↗
+                    </a>
+                </div>
+            </div>
+            
+            <!-- MAR 142 -->
+            <div class="drive-container">
+                <div class="drive-header">
+                    <img src="https://www.gstatic.com/images/branding/product/1x/drive_2020q4_48dp.png" alt="Google Drive" class="drive-icon">
+                    <h2>MAR 142 Files</h2>
+                    <div class="last-updated">Last synced: <span class="update-time">just now</span></div>
+                </div>
+                <div class="iframe-wrapper">
+                    <iframe src="https://drive.google.com/embeddedfolderview?id=1NH_dWcwUksr86yJ329V4eG9Owfvr1tRn#grid"
+                            class="drive-iframe" 
+                            title="MAR 142 Files"></iframe>
+                    <div class="loading-overlay">
+                        <div class="spinner"></div>
+                        <p>Loading files...</p>
+                    </div>
+                </div>
+                <div class="drive-footer">
+                    <a href="https://drive.google.com/drive/folders/1NH_dWcwUksr86yJ329V4eG9Owfvr1tRn" target="_blank" class="open-drive-btn">
+                        Open in Drive ↗
+                    </a>
+                </div>
+            </div>
+            
+            <!-- MAR 143 -->
+            <div class="drive-container">
+                <div class="drive-header">
+                    <img src="https://www.gstatic.com/images/branding/product/1x/drive_2020q4_48dp.png" alt="Google Drive" class="drive-icon">
+                    <h2>MAR 143 Files</h2>
+                    <div class="last-updated">Last synced: <span class="update-time">just now</span></div>
+                </div>
+                <div class="iframe-wrapper">
+                    <iframe src="https://drive.google.com/embeddedfolderview?id=1hqOxjFSoupU85LMVu-pmZH3dy24Xs-g7#grid"
+                            class="drive-iframe" 
+                            title="MAR 143 Files"></iframe>
+                    <div class="loading-overlay">
+                        <div class="spinner"></div>
+                        <p>Loading files...</p>
+                    </div>
+                </div>
+                <div class="drive-footer">
+                    <a href="https://drive.google.com/drive/folders/1hqOxjFSoupU85LMVu-pmZH3dy24Xs-g7" target="_blank" class="open-drive-btn">
+                        Open in Drive ↗
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="upload-section">
+            <a href="https://1024terabox.com/s/1JI8pWFXGYXCGrgWxaq-wew" target="_blank" class="upload-btn">
+                <i class="fas fa-upload"></i> Upload Files to TeraBox
+            </a>
+        </div>
+        
+        <footer>
+            <p>Last updated: <span id="updateDate"></span> | Powered by DrNayWinAung | MAR Students Use Only</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Display current date
+        document.getElementById('updateDate').textContent = new Date().toLocaleDateString();
+        
+        // Handle iframe loading states
+        document.querySelectorAll('.drive-iframe').forEach(iframe => {
+            iframe.addEventListener('load', function() {
+                this.closest('.iframe-wrapper').classList.add('loaded');
+                const timeElement = this.closest('.drive-container').querySelector('.update-time');
+                timeElement.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            });
+        });
+        
+        // Refresh iframes every hour to ensure updates
+        setInterval(() => {
+            document.querySelectorAll('.drive-iframe').forEach(iframe => {
+                iframe.src = iframe.src.split('&')[0] + `&t=${Date.now()}`;
+                iframe.closest('.iframe-wrapper').classList.remove('loaded');
+            });
+        }, 3600000);
+    </script>
         </body>
 </html>
