@@ -13,6 +13,33 @@
         height: auto;    /* Maintains aspect ratio */
         display: block;  /* Removes extra space below the image (if it's inline) */
     }
+        .image-container {
+            position: relative;
+            display: inline-block;
+            margin: 20px;
+            overflow: hidden;
+        }
+        .zoomable-image {
+            max-width: 100%;
+            height: auto;
+            transition: transform 0.2s;
+            cursor: zoom-in;
+        }
+        .zoom-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .zoom-controls button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -24,8 +51,48 @@
     </div>
     <div>
    <p> Time Table for MAR 3rd Batch , UCMS</p>     
-  <img src="timetable.png" alt="Timetable image" class="responsive-image">
+    <div class="image-container" id="imageContainer">
+        <img src="timetable.png" alt="Zoomable Image" class="zoomable-image" id="zoomImage">
+        <div class="zoom-controls">
+            <button onclick="zoomIn()">Zoom In</button>
+            <button onclick="zoomOut()">Zoom Out</button>
+        </div>
     </div>
+    </div>
+    
+    <script>
+        let scale = 1;
+        const image = document.getElementById('zoomImage');
+        const container = document.getElementById('imageContainer');
+
+        function zoomIn() {
+            scale += 0.1;
+            image.style.transform = `scale(${scale})`;
+        }
+
+        function zoomOut() {
+            if (scale > 0.1) {
+                scale -= 0.1;
+                image.style.transform = `scale(${scale})`;
+            }
+        }
+
+        // Mouse wheel zoom
+        container.addEventListener('wheel', function(event) {
+            event.preventDefault();
+            if (event.deltaY < 0) {
+                zoomIn();
+            } else {
+                zoomOut();
+            }
+        });
+
+        // Optional: Reset zoom on double-click
+        image.addEventListener('dblclick', function() {
+            scale = 1;
+            image.style.transform = `scale(${scale})`;
+        });
+    </script>
     <script>
         function checkPassword() {
             const password = "marstudents"; // Change this!
