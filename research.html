@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>My Paper Search</title>
     <style>
-        /* Some basic styling to make it look clean */
         body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 20px; }
         #search-container { display: flex; margin-bottom: 20px; }
         #search-input { flex-grow: 1; padding: 8px; font-size: 16px; }
@@ -26,10 +25,61 @@
     <div id="results-container">
         </div>
 
-
     <script>
-        // ALL OUR JAVASCRIPT CODE WILL GO INSIDE THIS SCRIPT TAG
-        
+        // --- PART 1: Get references to our HTML elements ---
+        const searchButton = document.getElementById('search-button');
+        const searchInput = document.getElementById('search-input');
+        const resultsContainer = document.getElementById('results-container');
+
+        // --- PART 2: Tell the button to listen for a click ---
+        searchButton.addEventListener('click', () => {
+            const userQuery = searchInput.value;
+            fetchAndShowPapers(userQuery);
+        });
+
+        // --- PART 3: The main function to talk to the API ---
+        async function fetchAndShowPapers(query) {
+            if (!query) {
+                resultsContainer.innerHTML = 'Please enter a search term.';
+                return;
+            }
+            resultsContainer.innerHTML = 'Loading results...';
+            const baseUrl = 'https://api.semanticscholar.org/graph/v1/paper/search';
+            const fields = 'title,authors,year,url';
+            const limit = 10;
+            const url = `<span class="math-inline">\{baseUrl\}?query\=</span>{encodeURIComponent(query)}&fields=<span class="math-inline">\{fields\}&limit\=</span>{limit}`;
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                displayPapers(data);
+            } catch (error) {
+                console.error('There was an error:', error);
+                resultsContainer.innerHTML = 'Sorry, something went wrong. Please try again.';
+            }
+        }
+
+        // --- PART 4: The function to display the papers ---
+        function displayPapers(apiResponse) {
+            resultsContainer.innerHTML = '';
+            if (!apiResponse.data || apiResponse.data.length === 0) {
+                resultsContainer.innerHTML = 'No papers found.';
+                return;
+            }
+            apiResponse.data.forEach(paper => {
+                let authorNames = 'Authors not available';
+                if (paper.authors && paper.authors.length > 0) {
+                    authorNames = paper.authors.map(author => author.name).join(', ');
+                }
+                const paperHTML = `
+                    <div class="paper">
+                        <h3><a href="<span class="math-inline">\{paper\.url\}" target\="\_blank"\></span>{paper.title}</a></h3>
+                        <p><strong>Authors:</strong> ${authorNames}</p>
+                        <p><strong>Year:</strong> ${paper.year || 'N/A'}</p>
+                    </div>
+                `;
+                resultsContainer.innerHTML += paperHTML;
+            });
+        }
     </script>
 
 </body>
