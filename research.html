@@ -26,71 +26,70 @@
         </div>
 
 <script>
-        // --- PART 1: Get references to our HTML elements ---
-        const searchButton = document.getElementById('search-button');
-        const searchInput = document.getElementById('search-input');
-        const resultsContainer = document.getElementById('results-container');
+    // --- PART 1: Get references to our HTML elements ---
+    const searchButton = document.getElementById('search-button');
+    const searchInput = document.getElementById('search-input');
+    const resultsContainer = document.getElementById('results-container');
 
-        // --- PART 2: Tell the button to listen for a click ---
-        searchButton.addEventListener('click', () => {
-            const userQuery = searchInput.value;
-            fetchAndShowPapers(userQuery);
+    // --- PART 2: Tell the button to listen for a click ---
+    searchButton.addEventListener('click', () => {
+        const userQuery = searchInput.value;
+        fetchAndShowPapers(userQuery);
+    });
+
+    // --- PART 3: The main function to talk to the API ---
+    async function fetchAndShowPapers(query) {
+        if (!query) {
+            resultsContainer.innerHTML = 'Please enter a search term.';
+            return;
+        }
+        resultsContainer.innerHTML = 'Loading results...';
+        
+        const baseUrl = 'https://api.semanticscholar.org/graph/v1/paper/search';
+        const fields = 'title,authors,year,url';
+        const limit = 10;
+
+        // ---- THIS IS THE ONLY LINE THAT NEEDS TO BE FIXED ----
+        // Make sure it uses BACKTICKS (` `), not single quotes (')
+        const url = `${baseUrl}?query=${encodeURIComponent(query)}&fields=${fields}&limit=${limit}`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                // This is the part that correctly caught the 404 error for us!
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            displayPapers(data);
+
+        } catch (error) {
+            console.error('There was an error:', error);
+            resultsContainer.innerHTML = `Sorry, something went wrong. Please check the console for errors.`;
+        }
+    }
+
+    // --- PART 4: The function to display the papers ---
+    function displayPapers(apiResponse) {
+        resultsContainer.innerHTML = '';
+        if (!apiResponse.data || apiResponse.data.length === 0) {
+            resultsContainer.innerHTML = 'No papers found.';
+            return;
+        }
+        apiResponse.data.forEach(paper => {
+            let authorNames = 'Authors not available';
+            if (paper.authors && paper.authors.length > 0) {
+                authorNames = paper.authors.map(author => author.name).join(', ');
+            }
+            const paperHTML = `
+                <div class="paper">
+                    <h3><a href="${paper.url}" target="_blank">${paper.title}</a></h3>
+                    <p><strong>Authors:</strong> ${authorNames}</p>
+                    <p><strong>Year:</strong> ${paper.year || 'N/A'}</p>
+                </div>
+            `;
+            resultsContainer.innerHTML += paperHTML;
         });
-
-        // --- PART 3: The main function to talk to the API ---
-        async function fetchAndShowPapers(query) {
-            if (!query) {
-                resultsContainer.innerHTML = 'Please enter a search term.';
-                return;
-            }
-            resultsContainer.innerHTML = 'Loading results...';
-            
-            const baseUrl = 'https://api.semanticscholar.org/graph/v1/paper/search';
-            const fields = 'title,authors,year,url';
-            const limit = 10;
-
-            // ---- THIS IS THE CORRECTED LINE ----
-            // It now uses backticks ` instead of single quotes '
-            const url = `<span class="math-inline">\{baseUrl\}?query\=</span>{encodeURIComponent(query)}&fields=<span class="math-inline">\{fields\}&limit\=</span>{limit}`;
-
-            try {
-                const response = await fetch(url);
-                // This check is important! It ensures we got a successful response
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = await response.json();
-                displayPapers(data);
-
-            } catch (error) {
-                console.error('There was an error:', error);
-                resultsContainer.innerHTML = `Sorry, something went wrong. Check the console for errors.`;
-            }
-        }
-
-        // --- PART 4: The function to display the papers ---
-        function displayPapers(apiResponse) {
-            resultsContainer.innerHTML = '';
-            if (!apiResponse.data || apiResponse.data.length === 0) {
-                resultsContainer.innerHTML = 'No papers found.';
-                return;
-            }
-            apiResponse.data.forEach(paper => {
-                let authorNames = 'Authors not available';
-                if (paper.authors && paper.authors.length > 0) {
-                    authorNames = paper.authors.map(author => author.name).join(', ');
-                }
-                const paperHTML = `
-                    <div class="paper">
-                        <h3><a href="<span class="math-inline">\{paper\.url\}" target\="\_blank"\></span>{paper.title}</a></h3>
-                        <p><strong>Authors:</strong> ${authorNames}</p>
-                        <p><strong>Year:</strong> ${paper.year || 'N/A'}</p>
-                    </div>
-                `;
-                resultsContainer.innerHTML += paperHTML;
-            });
-        }
-    </script>
-
+    }
+</script>
 </body>
 </html>
