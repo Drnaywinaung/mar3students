@@ -4,7 +4,7 @@ const urlsToCache = [
   '/index.html',
   '/css/style.css',
   '/js/app.js',
-  '/images/logo.png' // Add all your static assets here
+  '/mar.png' // Add all your static assets here
 ];
 
 // Install event: Caches static assets
