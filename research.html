@@ -25,7 +25,7 @@
     <div id="results-container">
         </div>
 
-    <script>
+<script>
         // --- PART 1: Get references to our HTML elements ---
         const searchButton = document.getElementById('search-button');
         const searchInput = document.getElementById('search-input');
@@ -44,17 +44,27 @@
                 return;
             }
             resultsContainer.innerHTML = 'Loading results...';
+            
             const baseUrl = 'https://api.semanticscholar.org/graph/v1/paper/search';
             const fields = 'title,authors,year,url';
             const limit = 10;
+
+            // ---- THIS IS THE CORRECTED LINE ----
+            // It now uses backticks ` instead of single quotes '
             const url = `<span class="math-inline">\{baseUrl\}?query\=</span>{encodeURIComponent(query)}&fields=<span class="math-inline">\{fields\}&limit\=</span>{limit}`;
+
             try {
                 const response = await fetch(url);
+                // This check is important! It ensures we got a successful response
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
                 const data = await response.json();
                 displayPapers(data);
+
             } catch (error) {
                 console.error('There was an error:', error);
-                resultsContainer.innerHTML = 'Sorry, something went wrong. Please try again.';
+                resultsContainer.innerHTML = `Sorry, something went wrong. Check the console for errors.`;
             }
         }
 
