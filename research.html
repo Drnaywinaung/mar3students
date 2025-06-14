@@ -11,13 +11,6 @@
         .paper { border-bottom: 1px solid #ccc; padding-bottom: 15px; margin-bottom: 15px; }
         .paper h3 { margin-bottom: 5px; }
         .paper p { margin: 0; }
-        
-        /* NEW: Styles for pagination */
-        #pagination-container { text-align: center; margin-top: 20px; }
-        .pagination-button { padding: 8px 16px; margin: 0 5px; cursor: pointer; border: 1px solid #ccc; }
-        .pagination-button:disabled { cursor: not-allowed; background-color: #f0f0f0; color: #aaa; }
-        #page-info { margin: 0 15px; display: inline-block; }
-
     </style>
 </head>
 <body>
@@ -29,125 +22,73 @@
         <button id="search-button">Search</button>
     </div>
 
-    <div id="results-container"></div>
-    <div id="pagination-container"></div>
+    <div id="results-container">
+        </div>
 
-    <script>
-        const searchButton = document.getElementById('search-button');
-        const searchInput = document.getElementById('search-input');
-        const resultsContainer = document.getElementById('results-container');
-        const paginationContainer = document.getElementById('pagination-container');
+<script>
+    // --- PART 1: Get references to our HTML elements ---
+    const searchButton = document.getElementById('search-button');
+    const searchInput = document.getElementById('search-input');
+    const resultsContainer = document.getElementById('results-container');
 
-        // NEW: State variables for pagination
-        let currentPage = 1;
-        let currentQuery = '';
-        const limit = 20; // Show 20 results per page
+    // --- PART 2: Tell the button to listen for a click ---
+    searchButton.addEventListener('click', () => {
+        const userQuery = searchInput.value;
+        fetchAndShowPapers(userQuery);
+    });
 
-        searchButton.addEventListener('click', () => {
-            currentQuery = searchInput.value;
-            // When a new search starts, always go back to page 1
-            fetchAndShowPapers(currentQuery, 1);
+    // --- PART 3: The main function to talk to the API ---
+    async function fetchAndShowPapers(query) {
+        if (!query) {
+            resultsContainer.innerHTML = 'Please enter a search term.';
+            return;
+        }
+        resultsContainer.innerHTML = 'Loading results...';
+        
+        const baseUrl = 'https://api.semanticscholar.org/graph/v1/paper/search';
+        const fields = 'title,authors,year,url';
+        const limit = 50;
+
+        // ---- THIS IS THE ONLY LINE THAT NEEDS TO BE FIXED ----
+        // Make sure it uses BACKTICKS (` `), not single quotes (')
+       const url = baseUrl + '?query=' + encodeURIComponent(query) + '&fields=' + fields + '&limit=' + limit;
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                // This is the part that correctly caught the 404 error for us!
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            displayPapers(data);
+
+        } catch (error) {
+            console.error('There was an error:', error);
+            resultsContainer.innerHTML = `Sorry, something went wrong. Please check the console for errors.`;
+        }
+    }
+
+    // --- PART 4: The function to display the papers ---
+    function displayPapers(apiResponse) {
+        resultsContainer.innerHTML = '';
+        if (!apiResponse.data || apiResponse.data.length === 0) {
+            resultsContainer.innerHTML = 'No papers found.';
+            return;
+        }
+        apiResponse.data.forEach(paper => {
+            let authorNames = 'Authors not available';
+            if (paper.authors && paper.authors.length > 0) {
+                authorNames = paper.authors.map(author => author.name).join(', ');
+            }
+            const paperHTML = `
+                <div class="paper">
+                    <h3><a href="${paper.url}" target="_blank">${paper.title}</a></h3>
+                    <p><strong>Authors:</strong> ${authorNames}</p>
+                    <p><strong>Year:</strong> ${paper.year || 'N/A'}</p>
+                </div>
+            `;
+            resultsContainer.innerHTML += paperHTML;
         });
-
-        async function fetchAndShowPapers(query, page) {
-            if (!query) {
-                resultsContainer.innerHTML = 'Please enter a search term.';
-                return;
-            }
-            resultsContainer.innerHTML = 'Loading results...';
-            // Clear old pagination buttons
-            paginationContainer.innerHTML = ''; 
-            
-            currentPage = page; // Update the current page
-            
-            // NEW: Calculate the offset
-            const offset = (page - 1) * limit;
-
-            const baseUrl = 'https://api.semanticscholar.org/graph/v1/paper/search';
-            const fields = 'title,authors,year,url';
-            const url = `${baseUrl}?query=${encodeURIComponent(query)}&fields=${fields}&limit=${limit}&offset=${offset}`;
-
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = await response.json();
-                displayPapers(data);
-
-            } catch (error) {
-                console.error('There was an error:', error);
-                resultsContainer.innerHTML = `Sorry, something went wrong.`;
-            }
-        }
-
-        function displayPapers(apiResponse) {
-            resultsContainer.innerHTML = '';
-            
-            if (!apiResponse.data || apiResponse.data.length === 0) {
-                resultsContainer.innerHTML = 'No papers found.';
-                return;
-            }
-            
-            apiResponse.data.forEach(paper => {
-                let authorNames = 'Authors not available';
-                if (paper.authors && paper.authors.length > 0) {
-                    authorNames = paper.authors.map(author => author.name).join(', ');
-                }
-                const paperHTML = `
-                    <div class="paper">
-                        <h3><a href="${paper.url}" target="_blank">${paper.title}</a></h3>
-                        <p><strong>Authors:</strong> ${authorNames}</p>
-                        <p><strong>Year:</strong> ${paper.year || 'N/A'}</p>
-                    </div>
-                `;
-                resultsContainer.innerHTML += paperHTML;
-            });
-
-            // NEW: Call the function to create pagination buttons
-            displayPagination(apiResponse.total);
-        }
-
-        // NEW: This entire function handles the pagination buttons
-        function displayPagination(totalResults) {
-            paginationContainer.innerHTML = ''; // Clear old buttons
-            
-            // Calculate how many pages are needed in total
-            const totalPages = Math.ceil(totalResults / limit);
-
-            if (totalPages <= 1) return; // Don't show buttons if there's only one page
-
-            // --- Previous Button ---
-            const prevButton = document.createElement('button');
-            prevButton.innerText = '← Previous';
-            prevButton.className = 'pagination-button';
-            if (currentPage === 1) {
-                prevButton.disabled = true; // Disable if on the first page
-            }
-            prevButton.addEventListener('click', () => {
-                fetchAndShowPapers(currentQuery, currentPage - 1);
-            });
-            paginationContainer.appendChild(prevButton);
-            
-            // --- Page Info Text ---
-            const pageInfo = document.createElement('span');
-            pageInfo.id = 'page-info';
-            pageInfo.innerText = `Page ${currentPage} of ${totalPages}`;
-            paginationContainer.appendChild(pageInfo);
-
-            // --- Next Button ---
-            const nextButton = document.createElement('button');
-            nextButton.innerText = 'Next →';
-            nextButton.className = 'pagination-button';
-            if (currentPage >= totalPages) {
-                nextButton.disabled = true; // Disable if on the last page
-            }
-            nextButton.addEventListener('click', () => {
-                fetchAndShowPapers(currentQuery, currentPage + 1);
-            });
-            paginationContainer.appendChild(nextButton);
-        }
-    </script>
-
+    }
+</script>
 </body>
 </html>
