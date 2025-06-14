@@ -51,8 +51,7 @@
 
         // ---- THIS IS THE ONLY LINE THAT NEEDS TO BE FIXED ----
         // Make sure it uses BACKTICKS (` `), not single quotes (')
-        const url = `${baseUrl}?query=${encodeURIComponent(query)}&fields=${fields}&limit=${limit}`;
-
+       const url = baseUrl + '?query=' + encodeURIComponent(query) + '&fields=' + fields + '&limit=' + limit;
         try {
             const response = await fetch(url);
             if (!response.ok) {
